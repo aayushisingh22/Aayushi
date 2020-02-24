@@ -1,0 +1,20 @@
+@charset "ISO-8859-1";
+#head{
+	border-style:solid;
+	display: flex;
+	background-color:black; 
+	
+}
+#ecommerce{
+	color:white;
+	flex-basis:60%;
+}
+
+#reg{
+	padding-top:4%;
+	display:flex;
+	color:white;
+}
+#reg>a{
+	padding-left:20%;
+}
