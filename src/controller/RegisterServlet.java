@@ -1,11 +1,19 @@
 package controller;
 
 import java.io.IOException;
+import java.util.Map;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import dto.User;
+import util.UserValidation;
 
 /**
  * Servlet implementation class RegisterServlet
@@ -13,29 +21,45 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/registerServlet")
 public class RegisterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public RegisterServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		User user = new User();
+		String userName = request.getParameter("userName");
+		String email = request.getParameter("email");
+		String mobile = request.getParameter("mobile");
+		String password = request.getParameter("password");
+		user.setUserName(userName);
+		user.setEmail(email);
+		user.setMobile(mobile);
+		user.setPassword(password);
+		System.out.println(email);
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		UserValidation userValid = new UserValidation();
+
+		Map<String, String> errorMessages = userValid.validate(user);
+		if (errorMessages.size() > 0) {
+			request.setAttribute("errorMessages", errorMessages);
+			request.getRequestDispatcher("Register.jsp").forward(request, response);
+		} else {
+
+			EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("EcommerceDb");
+			EntityManager entityManager = entityManagerFactory.createEntityManager();
+			EntityTransaction transaction = entityManager.getTransaction();
+			try {
+				transaction.begin();
+				entityManager.persist(user);
+				transaction.commit();
+			} catch (Exception e) {
+				e.printStackTrace();
+				transaction.rollback();
+			}
+		
+			request.getRequestDispatcher("Login.jsp").forward(request, response);
+			
+
+		}
+
 	}
 
 }

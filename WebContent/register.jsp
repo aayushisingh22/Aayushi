@@ -25,24 +25,24 @@ padding-top: 5%;
 		
 	<div id="body">
 		<h1 style="color: black;">Registration</h1>
-		<form action="/RegisterServlet" method="post">
+		<form action="registerServlet" name="regform" method="post" onsubmit="return registerValidation()">
 	
 			<table>
 				<tr>
-					<td><label>Full name</label></td>
-					<td><input type="text" value="${param.fullName}" name="fullName"></td>
+					<td><label>UserName</label></td>
+					<td><input type="text" value="${param.userName}" name="userName" pattern="[a-zA-Z]{5,15}"></td>
 				</tr>
 				<tr>
 					<td><label>Email</label></td>
-					<td><input type="email" value="${param.email}" name="email"></td>
+					<td><input type="email" value="${param.email}" name="email" pattern="[a-zA-Z0-9]{1,}+@[a-zA-z]{2,7}+.[a-z]{3,6}"></td>
 				</tr>
 				<tr>
 					<td><label>Mobile</label></td>
-					<td><input type="tel" value="${param.mobile}" name="mobile"></td>
+					<td><input type="tel" value="${param.mobile}" name="mobile" pattern="[0-9]{10}"></td>
 				</tr>
 				<tr>
 					<td><label>Password</label></td>
-					<td><input type="password" value="${param.password}"
+					<td><input type="password" value="${param.password} name="password" pattern="[a-zA-Z0-9]{8}"
 						name="password"></td>
 				</tr>
 				
@@ -56,6 +56,7 @@ padding-top: 5%;
 				</div>
 
 		</form>
+		<script src="Validation.js"></script>
 	</div>
 </body>
 </html>

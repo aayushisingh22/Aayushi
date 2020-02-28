@@ -38,4 +38,16 @@ public class UserValidation {
 	
 		return mp;
 	}
+
+	public Map<String, String> loginValidation(String email, String password) {
+		// TODO Auto-generated method stub
+		if (email.isEmpty()) {
+			mp.put("emailError", "enter email");
+		}
+		
+		if(password.isEmpty()) {
+			mp.put("passwordError", "enter valid password again");
+		}
+		return mp;
+	}
 }
