@@ -4,9 +4,11 @@ import java.util.ArrayList;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
+import dto.ProductDetails;
 import dto.User;
 
 public class Service {
@@ -19,13 +21,14 @@ public class Service {
 		
 		try {
 		@SuppressWarnings("unchecked")
-		TypedQuery<User> resultset = (TypedQuery<User>) em
-				.createQuery("from user_details where email=:email and password=:password");
+		TypedQuery<User> resultset =  em
+				.createQuery("from User where email=:email and password=:password",User.class);
 		resultset.setParameter("email", email);
 		resultset.setParameter("password", password);
-		System.out.println(((User) resultset).getEmail());
+		
 	 return resultset.getSingleResult();
-		}catch (Exception e) {                       
+		}catch (Exception e) {  
+			e.printStackTrace();
 			return null;
 			
 		}
@@ -33,4 +36,40 @@ public class Service {
 	
 	}
 
+	public boolean dataBaseConnection(User user) {
+		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("EcommerceDb");
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		try {
+			transaction.begin();
+			entityManager.persist(user);
+			transaction.commit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			transaction.rollback();
+		}
+		return false;
+		
+	}
+
+	public boolean addProductsIntoDb(ProductDetails pd) {
+		
+		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("EcommerceDb");
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		try {
+			transaction.begin();
+			entityManager.persist(pd);
+			transaction.commit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			transaction.rollback();
+		}
+		return false;
+		
+		
+		
+	}
 }

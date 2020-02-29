@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dto.User;
 import service.Service;
@@ -36,8 +37,9 @@ public class LoginServlet extends HttpServlet {
 			User loginDetails = service.fetchingLogindetails(email, password);
 			if (loginDetails != null) {
 				HttpSession session = request.getSession();
+				session.setAttribute("loginDetails", loginDetails);
 				System.out.println("login successfully");
-				response.sendRedirect("Home.jsp");
+				response.sendRedirect("modify.jsp");
 			} else {
                  System.out.println("login failed");
                  request.setAttribute("loginDetails", loginDetails);

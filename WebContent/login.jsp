@@ -12,7 +12,7 @@
 	<center id="body">
 		<h1 style="color: black;">Login</h1>
 
-		<form>
+		<form action=loginServlet method="post">
 		<center id="login">
 			<table>
 				<tr>
