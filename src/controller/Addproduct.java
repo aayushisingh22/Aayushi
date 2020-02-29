@@ -38,7 +38,7 @@ public class Addproduct extends HttpServlet {
 		
 		if(errorMessages.size()>0) {
 			request.setAttribute("errorMessages", errorMessages);
-			request.getRequestDispatcher("AddProduct.jsp").forward(request, response);
+			request.getRequestDispatcher("Addproduct.jsp").forward(request, response);
 		}
 		else {
 			

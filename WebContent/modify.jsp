@@ -28,7 +28,7 @@ padding-right: 15%;
 		<a href="Addproduct.jsp"><button Style="color: black">Add Product</button></a>
 			<a href="Editproduct.jsp"><button Style="color: black">Edit product</button></a> <a
 				href="Deleteproduct.jsp"><button Style="color: black">Delete product</button></a>
-				<a href="Logout"><button Style="color: black">LogOut</button></a>
+				<a href="logout"><button Style="color: black">LogOut</button></a>
 				
 		</div>
 	</div>
