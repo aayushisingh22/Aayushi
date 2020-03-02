@@ -1,19 +1,25 @@
 package controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 import dto.ProductDetails;
 import service.Service;
 import util.ProductValidation;
 
 @WebServlet("/addproduct")
+@MultipartConfig
 public class Addproduct extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -45,7 +51,33 @@ public class Addproduct extends HttpServlet {
 			Service service =new Service();
 			boolean productAdded=service.addProductsIntoDb(pd);
 			if(productAdded) {
-				response.sendRedirect("Addproduct.jsp");
+
+				Part part = request.getPart("prodimg");
+				InputStream inputStream = part.getInputStream();
+
+				byte[] imageByteArray = new byte[inputStream.available()];
+
+				inputStream.read(imageByteArray);
+
+				String imagePath = request.getServletContext().getRealPath("/");
+
+				imagePath = imagePath + "/images/";
+
+				File imageFileDirectoryPath = new File(imagePath);
+				if (!imageFileDirectoryPath.exists()) {
+					imageFileDirectoryPath.mkdir();
+				}
+
+				FileOutputStream fileOutputStream = new FileOutputStream(
+						imageFileDirectoryPath + "/" + pd.getProductId() + ".jpg");
+
+				System.out.println(imageFileDirectoryPath.getPath());
+				System.out.println(imageFileDirectoryPath.getAbsolutePath());
+
+				fileOutputStream.write(imageByteArray);
+				fileOutputStream.flush();
+				fileOutputStream.close();
+				response.sendRedirect("edit");
 			}
 			else{
 				request.getRequestDispatcher("Addproduct.jsp").forward(request, response);

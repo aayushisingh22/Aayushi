@@ -14,15 +14,19 @@ import dto.User;
 
 public class Service {
 
-	@SuppressWarnings("unchecked")
-	public <al> User fetchingLogindetails(String email, String password) {
+	private EntityManager entityManager;
+
+	public Service() {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("EcommerceDb");
-		EntityManager em = emf.createEntityManager();
+		entityManager = emf.createEntityManager();
+
+	}
+
+	public User fetchingLogindetails(String email, String password) {
 
 		try {
-			@SuppressWarnings("unchecked")
-			TypedQuery<User> resultset = em.createQuery("from User where email=:email and password=:password",
-					User.class);
+			TypedQuery<User> resultset = entityManager
+					.createQuery("from User where email=:email and password=:password", User.class);
 			resultset.setParameter("email", email);
 			resultset.setParameter("password", password);
 
@@ -36,8 +40,6 @@ public class Service {
 	}
 
 	public boolean dataBaseConnection(User user) {
-		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("EcommerceDb");
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {
 			transaction.begin();
@@ -53,9 +55,6 @@ public class Service {
 	}
 
 	public boolean addProductsIntoDb(ProductDetails pd) {
-
-		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("EcommerceDb");
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {
 			transaction.begin();
@@ -71,12 +70,25 @@ public class Service {
 	}
 
 	public List<ProductDetails> getProducts() {
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("Ecommercedb");
-		EntityManager em = emf.createEntityManager();
 		try {
-			@SuppressWarnings("unchecked")
-			TypedQuery<ProductDetails> resultset = em.createQuery("from ProductDetails", ProductDetails.class);
+			TypedQuery<ProductDetails> resultset = entityManager.createQuery("from ProductDetails",
+					ProductDetails.class);
 			return resultset.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+
+		}
+	}
+
+	public ProductDetails getProductsById(Integer productId) {
+		// TODO Auto-generated method stub
+		try {
+			TypedQuery<ProductDetails> resultset = entityManager.createQuery("from ProductDetails where productId=:id",
+					ProductDetails.class);
+			resultset.setParameter("id", productId);
+
+			return resultset.getSingleResult();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
